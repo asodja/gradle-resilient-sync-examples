@@ -1,0 +1,3 @@
+tasks.withType(JavaCompile).configureEach {
+    destinationDir = layout.buildDirectory.dir("classes").get().asFile
+}
