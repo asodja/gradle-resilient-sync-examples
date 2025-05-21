@@ -1,0 +1,42 @@
+plugins {
+    id("java-library")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(Exec).configureEach {
+    // TODO: Fix for Gradle 9
+    commandLine = listOf("echo", "Hello, world!")
+}
+
+
+tasks.withType(JavaCompile).configureEach {
+    doLast {
+        // TODO: Fix for Gradle 9
+        options.allCompilerArgs.forEach {
+            println(it)
+        }
+    }
+}
+
+abstract class MyTask extends DefaultTask {
+
+    @InputDirectory
+    abstract DirectoryProperty getInputFile();
+
+
+    @TaskAction
+    def run() {
+        println("My input dir: " + inputFile.asFile.get())
+    }
+}
+
+TaskProvider<Javadoc> javaDoc = tasks.getByName("javadoc") as TaskProvider<Javadoc>
+tasks.register("myTask", MyTask) {
+    // TODO: Fix for Gradle 9
+    inputFile = javaDoc.map { it.destinationDir }
+}
