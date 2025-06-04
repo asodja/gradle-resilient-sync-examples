@@ -1,0 +1,25 @@
+plugins {
+    id("java-library")
+    // Test
+}
+
+tasks.withType(Exec).configureEach {
+    // With Gradle 9 you have to use
+    // commandLine(["echo", "Hello, world!"])
+    commandLine = ["echo", "Hello, world!"]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    doLast {
+        // With Gradle 9 you have to call
+        // options.allCompilerArgs.get().each {println(it) }
+        options.allCompilerArgs.each {println(it) }
+    }
+}
+
+TaskProvider<Javadoc> javaDoc = tasks.named("javadoc", Javadoc)
+tasks.register("myTask", MyTask) {
+    // With Gradle 9 one option is to call
+    // inputFile = javaDoc.flatMap { it.destinationDir }
+    inputFile = javaDoc.map { it.destinationDir }
+}
